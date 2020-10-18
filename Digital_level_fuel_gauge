@@ -1,0 +1,41 @@
+int sensorPin = A0;
+int nafta;  //Valor de salida
+const int nafnumReadings = 10;
+int nafreadings[nafnumReadings];
+int nafreadIndex = 0;
+int naftotal = 0;
+int nafaverage = 0;
+int mapnaf1; //Mínimo leído (vacío)
+int mapnaf2; //Maximo leído (Lleno)
+int mapnaf3 = 0; // 0%
+int mapnaf4 = 100; // 100%
+int minnaf1; // indicar mínimo led de aviso
+
+void nivelnafta(){
+        naftotal = naftotal - nafreadings[nafreadIndex];
+        nafreadings[nafreadIndex] = analogRead(sensorPin);
+        naftotal = naftotal + nafreadings[nafreadIndex];
+        nafreadIndex = nafreadIndex + 1;
+        if (nafreadIndex >= nafnumReadings) {
+          nafreadIndex = 0;
+        }
+        nafaverage = naftotal / nafnumReadings;
+        memset(buffer, 0, sizeof(buffer));
+        nafta = map(nafaverage, mapnaf1, mapnaf2, mapnaf3, mapnaf4);
+        if(nafta < 0) {
+          nafta = 0;
+        }
+        else if(nafta > 100) {
+          nafta = 100;
+        }
+        itoa(nafta, buffer, 10);
+        naftatxt.setText(buffer);
+        level.setValue(nafta);
+        
+        if(nafta < minnaf1){
+            // Encender led de aviso
+        }
+        else{
+            // Apagar led de aviso
+        }
+}
